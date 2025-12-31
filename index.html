@@ -1,0 +1,1807 @@
+<!doctype html>
+<html lang="id" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Undangan Pernikahan</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="/_sdk/data_sdk.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&amp;family=Poppins:wght@300;400;500;600;700&amp;family=Montserrat:wght@300;400;500;600&amp;family=Allura&amp;family=Playfair+Display:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    
+    .font-vibes {
+      font-family: 'Great Vibes', cursive;
+    }
+    
+    .font-cormorant {
+      font-family: 'Allura', cursive;
+    }
+    
+    .font-montserrat {
+      font-family: 'Montserrat', sans-serif;
+    }
+    
+    .font-header {
+      font-family: 'Playfair Display', serif;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-50px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(50px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes scaleIn {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+
+    @keyframes particleFloat {
+      0% { opacity: 0; transform: translate(0, 0) scale(0); }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { opacity: 0; transform: translate(var(--tx), var(--ty)) scale(1); }
+    }
+
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes scrollDot {
+      0%, 100% { transform: translateY(0); opacity: 1; }
+      50% { transform: translateY(12px); opacity: 0.3; }
+    }
+
+    .animate-scroll-dot {
+      animation: scrollDot 2.5s ease-in-out infinite;
+    }
+
+    @keyframes floatBubble {
+      0% {
+        transform: translateY(100vh) translateX(0) scale(0.5);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      85% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-150vh) translateX(var(--drift)) scale(1);
+        opacity: 0;
+      }
+    }
+
+    @keyframes swayBubble {
+      0%, 100% { 
+        transform: translateX(0) rotate(0deg); }
+      25% { 
+        transform: translateX(20px) rotate(5deg); 
+      }
+      50% { 
+        transform: translateX(0) rotate(0deg); 
+      }
+      75% { 
+        transform: translateX(-20px) rotate(-5deg); 
+      }
+    }
+
+    @keyframes rotateBubble {
+      from { 
+        transform: rotate(0deg); 
+      }
+      to { 
+        transform: rotate(360deg); 
+      }
+    }
+
+    @keyframes floatGently {
+      0%, 100% { 
+        transform: translateY(0) rotate(0deg); 
+      }
+      50% { 
+        transform: translateY(-15px) rotate(5deg); 
+      }
+    }
+
+    @keyframes flowerFadeIn {
+      from {
+        opacity: 0;
+        transform: translateX(-30px) scale(0.8);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+      }
+    }
+
+    @keyframes flowerFadeInRight {
+      from {
+        opacity: 0;
+        transform: translateX(30px) scale(0.8);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+      }
+    }
+
+    @keyframes flowerFadeOut {
+      from {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+      }
+      to {
+        opacity: 0;
+        transform: translateX(-30px) scale(0.8);
+      }
+    }
+
+    @keyframes flowerFadeOutRight {
+      from {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+      }
+      to {
+        opacity: 0;
+        transform: translateX(30px) scale(0.8);
+      }
+    }
+
+    .bubble-image {
+      position: fixed;
+      width: 70px;
+      height: 70px;
+      pointer-events: none;
+      z-index: 9999;
+      bottom: -100px;
+      animation: floatBubble var(--duration) ease-in-out infinite;
+      animation-delay: var(--delay);
+      filter: drop-shadow(0 4px 8px rgba(255,255,255,0.4));
+      display: none;
+    }
+
+    .bubble-image.active {
+      display: block;
+    }
+
+    .flower-decoration {
+      position: absolute;
+      width: 120px;
+      height: 120px;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    .content-container {
+      position: relative;
+      z-index: 10;
+    }
+
+    .flower-decoration.left {
+      animation: floatGently 4s ease-in-out infinite, flowerFadeIn 1s ease-out;
+    }
+
+    .flower-decoration.right {
+      animation: floatGently 4s ease-in-out infinite, flowerFadeInRight 1s ease-out;
+    }
+
+    .flower-decoration.left.fade-out {
+      animation: flowerFadeOut 0.8s ease-out forwards;
+    }
+
+    .flower-decoration.right.fade-out {
+      animation: flowerFadeOutRight 0.8s ease-out forwards;
+    }
+
+    .flower-decoration img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Positioning khusus untuk bunga agar tidak terpotong */
+    .flower-decoration.top-left {
+      top: 30px;
+      left: -60px;
+    }
+
+    .flower-decoration.bottom-left {
+      bottom: 30px;
+      left: -60px;
+    }
+
+    .flower-decoration.top-right {
+      top: 30px;
+      right: -60px;
+    }
+
+    .flower-decoration.bottom-right {
+      bottom: 30px;
+      right: -60px;
+    }
+
+
+
+    .bubble-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      animation: swayBubble var(--sway-duration) ease-in-out infinite, rotateBubble var(--rotate-duration) linear infinite;
+      animation-delay: var(--sway-delay), var(--rotate-delay);
+    }
+
+    .animate-fadeIn { animation: fadeIn 1.2s ease-out; }
+    .animate-slideDown { animation: slideDown 1s ease-out; }
+    .animate-slideUp { animation: slideUp 1s ease-out; }
+    .animate-scaleIn { animation: scaleIn 0.8s ease-out; }
+    .animate-float { animation: float 3s ease-in-out infinite; }
+
+    /* Scroll reveal animations */
+    .scroll-reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    }
+
+    .scroll-reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .scroll-reveal.hidden-up {
+      opacity: 0;
+      transform: translateY(-30px);
+    }
+
+    .scroll-fade {
+      opacity: 0;
+      transition: opacity 0.8s ease-out;
+    }
+
+    .scroll-fade.visible {
+      opacity: 1;
+    }
+
+    .scroll-fade.hidden-up {
+      opacity: 0;
+    }
+
+    .particle {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: radial-gradient(circle, rgba(255,255,255,0.8), transparent);
+      border-radius: 50%;
+      pointer-events: none;
+      animation: particleFloat 3s ease-out forwards;
+    }
+
+    .overlay-pattern {
+      background-image: radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(255,255,255,0.1) 0%, transparent 50%);
+    }
+
+    .section-divider {
+      height: 2px;
+      background: linear-gradient(to right, transparent, currentColor, transparent);
+      opacity: 0.3;
+    }
+
+    .hover-lift {
+      transition: all 0.3s ease;
+    }
+
+    .hover-lift:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    }
+
+    .music-btn {
+      position: fixed;
+      bottom: 80px;
+      right: 24px;
+      z-index: 1000;
+      transition: all 0.3s ease;
+    }
+
+    .music-btn:hover {
+      transform: scale(1.1);
+    }
+
+    .music-btn {
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.2), 0 0 15px rgba(255, 255, 255, 0.1);
+      animation: glow 2s ease-in-out infinite;
+    }
+
+    @keyframes glow {
+      0%, 100% { 
+        box-shadow: 0 0 8px rgba(255, 255, 255, 0.2), 0 0 15px rgba(255, 255, 255, 0.1);
+      }
+      50% { 
+        box-shadow: 0 0 12px rgba(255, 255, 255, 0.3), 0 0 20px rgba(255, 255, 255, 0.15);
+      }
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .music-btn.playing {
+      animation: spin 3s linear infinite, glow 2s ease-in-out infinite;
+    }
+
+    .modal-backdrop {
+      backdrop-filter: blur(8px);
+    }
+
+    /* Cover specific styles */
+    .cover-ornament {
+      animation: rotate 30s linear infinite;
+    }
+
+    .bg-pattern {
+      background-image: url('https://raw.githubusercontent.com/ahmadhfiz0-code/Background/main/file_000000003c0c72069a2988044f28e7cd.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+    }
+    
+    body, html {
+      background-image: url('https://raw.githubusercontent.com/ahmadhfiz0-code/Background/main/file_000000003c0c72069a2988044f28e7cd.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+ </head>
+ <body class="h-full overflow-hidden">
+  <div id="app" class="w-full h-full"></div>
+  <script>
+    const defaultConfig = {
+      background_color: "#0a1929",
+      surface_color: "#1a2f42",
+      text_color: "#e3f2fd",
+      primary_action_color: "#4fc3f7",
+      secondary_action_color: "#0277bd",
+      font_family: "Poppins",
+      font_size: 16,
+      bride_name: "Zaitun",
+      bride_nickname: "Zaitun",
+      bride_parents: "Bapak Topan S.Jambu & Ibu Sari S. Taro",
+      bride_child: "Putri dari",
+      groom_name: "Putra",
+      groom_nickname: "Putra",
+      groom_parents: "Bapak Fushan S. Sirsak & Ibu Darian S. Melon",
+      groom_child: "Putra dari",
+      akad_date: "Selasa, 13 Januari 2026",
+      akad_time: "09.00 - 10.00 WITA",
+      resepsi_date: "Jumat, 16 Januari 2026",
+      resepsi_time: "09.00 - 11.00 WITA",
+      venue_name: "Masjid Agung Al Karomah Martapura",
+      venue_address: "Masjid Agung Al Karomah, Martapura",
+      maps_url: "https://maps.app.goo.gl/fcViRGUdSdgcz7cUA",
+      venue_name_resepsi: "Mesjid Raya Sabilul Muhtadin Banjarmasin",
+      venue_address_resepsi: "Mesjid Raya Sabilul Muhtadin, Banjarmasin",
+      maps_url_resepsi: "https://maps.app.goo.gl/tMiYQFgkuj7srG1a8",
+      guest_name: "Bapak H. Ultraman",
+      rekening_pria: "987654331",
+      rekening_wanita: "1122334455",
+      instagram_bride: "https://www.instagram.com/myundangan.in?igsh=czF3amN1bHEzM3I5",
+      instagram_groom: "https://www.instagram.com/myundangan.in?igsh=czF3amN1bHEzM3I5",
+      instagram_url: "https://www.instagram.com/myundangan.in?igsh=ejZvb2UxdmV0cWx4",
+      closing_message: "Merupakan suatu kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir untuk memberikan doa restu kepada kami."
+    };
+
+    let isOpened = false;
+    let countdownInterval = null;
+    let musicPlaying = false;
+    let animationShown = false;
+    let ayatAudioPlaying = false;
+    let comments = [];
+    let commentsVisible = false;
+    let isSubmitting = false;
+    let autoScrollInterval = null;
+    let isAutoScrolling = false;
+
+    // Data SDK Handler
+    const dataHandler = {
+      onDataChanged(data) {
+        comments = data.sort((a, b) => {
+          const dateA = new Date(b.timestamp);
+          const dateB = new Date(a.timestamp);
+          return dateA - dateB;
+        });
+        
+        const commentCount = document.getElementById('commentCount');
+        if (commentCount) {
+          commentCount.textContent = comments.length;
+        }
+        
+        if (commentsVisible) {
+          const config = window.elementSdk ? window.elementSdk.config : defaultConfig;
+          renderComments(config);
+        }
+      }
+    };
+
+    // Initialize Data SDK
+    (async () => {
+      if (window.dataSdk) {
+        const initResult = await window.dataSdk.init(dataHandler);
+        if (!initResult.isOk) {
+          console.error("Failed to initialize data SDK");
+        }
+      }
+    })();
+
+    async function onConfigChange(config) {
+      const app = document.getElementById('app');
+      
+      const bgColor = config.background_color || defaultConfig.background_color;
+      const surfaceColor = config.surface_color || defaultConfig.surface_color;
+      const textColor = config.text_color || defaultConfig.text_color;
+      const primaryColor = config.primary_action_color || defaultConfig.primary_action_color;
+      const secondaryColor = config.secondary_action_color || defaultConfig.secondary_action_color;
+      const fontFamily = config.font_family || defaultConfig.font_family;
+      const fontSize = config.font_size || defaultConfig.font_size;
+
+      const baseFontStack = 'Arial, sans-serif';
+      const customFont = `${fontFamily}, ${baseFontStack}`;
+
+      app.innerHTML = `
+        <!-- Main Content -->
+        <div id="mainContent" class="w-full h-full overflow-auto">
+          
+          <!-- 1. Hero Section - Foto Mempelai -->
+          <section id="photoSection" class="min-h-screen flex items-center justify-center px-6 py-20 relative overflow-hidden bg-pattern">
+            <div class="absolute inset-0" style="background: linear-gradient(to bottom, ${bgColor} 0%, ${bgColor} 85%, ${surfaceColor} 100%); opacity: 0.85;"></div>
+            
+            <div class="relative z-10 text-center max-w-4xl mx-auto px-4 animate-slideDown">
+              <!-- Foto Mempelai -->
+              <div class="mb-8 mt-8">
+                <!-- Tulisan The Wedding Of -->
+                <p style="color: ${textColor}; font-family: ${customFont}; font-size: ${fontSize * 0.875}px;" class="mb-8 tracking-widest uppercase opacity-80">The Wedding Of</p>
+                
+                <!-- Frame Foto Oval Vertikal Panjang -->
+                <div class="mx-auto mb-8 flex items-center justify-center overflow-hidden shadow-2xl rounded-full" 
+                     style="width: 110px; height: 180px; background: linear-gradient(135deg, ${secondaryColor}, ${bgColor}); border: 3px solid ${primaryColor};">
+                  <svg width="100%" height="100%" viewBox="0 0 110 180" class="opacity-40">
+                    <!-- Ornamen Minimalis -->
+                    <ellipse cx="55" cy="90" rx="35" ry="65" fill="${primaryColor}" opacity="0.3"/>
+                    <circle cx="55" cy="90" r="28" fill="${primaryColor}" opacity="0.2"/>
+                    <path d="M55 25 Q30 55 55 90 Q80 55 55 25" stroke="${primaryColor}" stroke-width="2.5" fill="none" opacity="0.4"/>
+                  </svg>
+                </div>
+                
+                <!-- Nama Mempelai -->
+                <h1 style="color: ${primaryColor}; font-size: ${fontSize * 3.5}px;" class="font-cormorant mb-4">${config.bride_nickname || defaultConfig.bride_nickname} & ${config.groom_nickname || defaultConfig.groom_nickname}</h1>
+                
+                <!-- Tanggal -->
+                <p style="color: ${textColor}; font-family: ${customFont}; font-size: ${fontSize * 1.125}px;" class="tracking-wider mb-12">16 . 01 . 2026</p>
+                
+                <!-- Scroll Indicator -->
+                <div class="animate-bounce">
+                  <div style="border: 2px solid ${primaryColor};" class="w-6 h-10 rounded-full mx-auto flex items-start justify-center p-1.5">
+                    <div style="background-color: ${primaryColor};" class="w-1.5 h-3 rounded-full animate-scroll-dot"></div>
+                  </div>
+                  <p style="color: ${textColor}; font-family: ${customFont}; font-size: ${fontSize * 0.75}px;" class="mt-2 opacity-50">Scroll</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- 2. We're Getting Married Section -->
+          <section class="min-h-screen flex items-center justify-center px-6 py-20 relative overflow-hidden bg-pattern">
+            <div class="absolute inset-0" style="background: linear-gradient(to bottom, ${surfaceColor} 0%, ${surfaceColor} 85%, ${bgColor} 100%); opacity: 0.85;"></div>
+            
+            <!-- Bunga Kiri Atas -->
+            <div class="flower-decoration left top-left" style="animation: floatGently 4s ease-in-out infinite, flowerFadeIn 1s ease-out; animation-delay: 0.5s;">
+              <img src="https://raw.githubusercontent.com/ahmadhfiz0-code/Asset-1/main/Desain%20tanpa%20judul_20251230_143205_0000.png" alt="" loading="eager">
+            </div>
+            <!-- Bunga Kiri Bawah -->
+            <div class="flower-decoration left bottom-left" style="animation: floatGently 4s ease-in-out infinite, flowerFadeIn 1s ease-out; animation-delay: 1.5s;">
+              <img src="https://raw.githubusercontent.com/ahmadhfiz0-code/Asset-1/main/Desain%20tanpa%20judul_20251230_143205_0000.png" alt="" loading="eager">
+            </div>
+            
+            <!-- Bunga Kanan Atas -->
+            <div class="flower-decoration right top-right" style="animation: floatGently 4s ease-in-out infinite, flowerFadeInRight 1s ease-out; animation-delay: 0.8s;">
+              <img src="https://raw.githubusercontent.com/ahmadhfiz0-code/Asset-1/main/Desain%20tanpa%20judul_20251230_143205_0000.png" alt="" loading="eager">
+            </div>
+            <!-- Bunga Kanan Bawah -->
+            <div class="flower-decoration right bottom-right" style="animation: floatGently 4s ease-in-out infinite, flowerFadeInRight 1s ease-out; animation-delay: 1.8s;">
+              <img src="https://raw.githubusercontent.com/ahmadhfiz0-code/Asset-1/main/Desain%20tanpa%20judul_20251230_143205_0000.png" alt="" loading="eager">
+            </div>
+            
+            <div class="relative z-10 text-center max-w-4xl mx-auto px-4 content-container">
+              <h2 style="color: ${primaryColor}; font-size: ${fontSize * 2}px;" class="font-header mb-12 scroll-reveal">We're Getting Married</h2>
+              
+              <div class="w-32 mx-auto mb-12 scroll-reveal">
+                <div class="section-divider" style="color: ${primaryColor};"></div>
+              </div>
+              
+              <div class="max-w-3xl mx-auto scroll-reveal">
+                <p style="color: ${primaryColor}; font-size: ${fontSize * 1.5}px;" class="mb-3 leading-relaxed" dir="rtl">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</p>
+                <p style="color: ${textColor}; font-family: ${customFont}; font-size: ${fontSize * 0.875}px;" class="mb-10 italic opacity-70">Bismillahirrahmanirrahim</p>
+                
+                <p style="color: ${textColor}; font-family: ${customFont}; font-size: ${fontSize}px;" class="mb-4 leading-relaxed scroll-reveal">Assalamu'alaikum Warahmatullahi Wabarakatuh</p>
+                
+                <p style="color: ${textColor}; font-family: ${customFont}; font-size: ${fontSize}px; line-height: 1.8;" class="mb-8 scroll-reveal">
+                  Dengan memohon rahmat dan ridho Allah SWT, kami bermaksud menyelenggarakan pernikahan putra-putri kami. ${config.closing_message || defaultConfig.closing_message}
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- 3. Ayat Section -->
+          <section class="py-20 px-6 relative overflow-hidden bg-pattern">
+            <div class="absolute inset-0" style="background: linear-gradient(to bottom, ${bgColor} 0%, ${bgColor} 85%, ${surfaceColor} 100%); opacity: 0.85;"></div>
+            
+            <!-- Bunga Kiri Atas -->
+            <div class="flower-decoration left top-left" style="animation: floatGently 4s ease-in-out infinite, flowerFadeIn 1s ease-out; animation-delay: 0.2s;">
+              <img src="https://raw.githubusercontent.com/ahmadhfiz0-code/Asset-1/main/Desain%20tanpa%20judul_20251230_143205_0000.png" alt="" loading="eager">
+            </div>
+            <!-- Bunga Kiri Bawah -->
+            <div class="flower-decoration left bottom-left" style="animation: floatGently 4s ease-in-out infinite, flowerFadeIn 1s ease-out; animation-delay: 1.2s;">
+              <img src="https://raw.githubusercontent.com/ahmadhfiz0-code/Asset-1/main/Desain%20tanpa%20judul_20251230_143205_0000.png" alt="" loading="eager">
+            </div>
+            
+            <!-- Bunga Kanan Atas -->
+            <div class="flower-decoration right top-right" style="animation: floatGently 4s ease-in-out infinite, flowerFadeInRight 1s ease-out; animation-delay: 0.6s;">
+              <img src="https://raw.githubusercontent.com/ahmadhfiz0-code/Asset-1/main/Desain%20tanpa%20judul_20251230_143205_0000.png" alt="" loading="eager">
+            </div>
+            <!-- Bunga Kanan Bawah -->
+            <div class="flower-decoration right bottom-right" style="animation: floatGently 4s ease-in-out infinite, flowerFadeInRight 1s ease-out; animation-delay: 1.6s;">
+              <img src="https://raw.githubusercontent.com/ahmadhfiz0-code/Asset-1/main/Desain%20tanpa%20judul_20251230_143205_0000.png" alt="" loading="eager">
+            </div>
+            
+            <div class="max-w-3xl mx-auto scroll-reveal relative z-10 content-container">
+              <!-- Tombol Dengar Audio -->
+              <div class="flex justify-center mb-8">
+                <button id="playAyatAudio" style="background-color: ${primaryColor}; color: ${surfaceColor};" class="w-14 h-14 rounded-full flex items-center justify-center hover:opacity-80 transition-all shadow-lg hover:scale-105">
+                  <svg id="playIcon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M8 5v14l11-7z"/>
+                  </svg>
+                  <svg id="pauseIcon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" class="hidden">
+                    <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/>
+                  </svg>
+                </button>
+              </div>
+              
+              <!-- Teks Arab -->
+              <div class="text-center mb-8">
+                <p style="color: ${primaryColor}; font-size: ${fontSize * 1.5}px; line-height: 2.2;" class="mb-6" dir="rtl">وَمِنْ ءَايَٰتِهِۦٓ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَٰجًا لِّتَسْكُنُوٓا۟ إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً ۚ إِنَّ فِى ذَٰلِكَ لَءَايَٰتٍ لِّقَ��ْمٍ يَتَفَكَّرُونَ</p>
+                <p style="color: ${textColor}; font-family: ${customFont}; font-size: ${fontSize * 0.875}px; line-height: 1.8;" class="italic opacity-70 mb-4">Wa min aayaatihii an khalaqa lakum min anfusikum azwaajan litaskunuu ilayhaa wa ja'ala bainakum mawaddatanw wa rahmah; inna fee zaalika la aayaatil liqawminy yatafakkaroon</p>
+              </div>
+              
+              <p style="color: ${textColor}; font-family: ${customFont}; font-size: ${fontSize}px; line-height: 1.8;" class="italic mb-3 text-center">
+                "Dan di antara tanda-tanda (kebesaran)-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang."
+              </p>
+              <p style="color: ${textColor}; font-family: ${customFont}; font-size: ${fontSize * 0.875}px;" class="font-semibold text-center">❁ QS. Ar-Rum: 21 ❁</p>
+            </div>
+          </section>
+
+          <!-- 4. Bride & Groom Section -->
+          <section class="py-20 px-6 relative overflow-hidden bg-pattern">
+            <div class="absolute inset-0" style="background: linear-gradient(to bottom, ${surfaceColor} 0%, ${surfaceColor} 85%, ${bgColor} 100%); opacity: 0.85;"></div>
+            
+            <!-- Bunga Kiri Atas -->
+            <div class="flower-decoration left top-left" style="animation: floatGently 4s ease-in-out infinite, flowerFadeIn 1s ease-out; animation-delay: 0.4s;">
+              <img src="https://raw.githubusercontent.com/ahmadhfiz0-code/Asset-1/main/Desain%20tanpa%20judul_20251230_143205_0000.png" alt="" loading="eager">
+            </div>
+            <!-- Bunga Kiri Bawah -->
+            <div class="flower-decoration left bottom-left" style="animation: floatGently 4s ease-in-out infinite, flowerFadeIn 1s ease-out; animation-delay: 1.4s;">
+              <img src="https://raw.githubusercontent.com/ahmadhfiz0-code/Asset-1/main/Desain%20tanpa%20judul_20251230_143205_0000.png" alt="" loading="eager">
+            </div>
+            
+            <!-- Bunga Kanan Atas -->
+            <div class="flower-decoration right top-right" style="animation: floatGently 4s ease-in-out infinite, flowerFadeInRight 1s ease-out; animation-delay: 0.7s;">
+              <img src="https://raw.githubusercontent.com/ahmadhfiz0-code/Asset-1/main/Desain%20tanpa%20judul_20251230_143205_0000.png" alt="" loading="eager">
+            </div>
+            <!-- Bunga Kanan Bawah -->
+            <div class="flower-decoration right bottom-right" style="animation: floatGently 4s ease-in-out infinite, flowerFadeInRight 1s ease-out; animation-delay: 1.7s;">
+              <img src="https://raw.githubusercontent.com/ahmadhfiz0-code/Asset-1/main/Desain%20tanpa%20judul_20251230_143205_0000.png" alt="" loading="eager">
+            </div>
+            
+            <div class="max-w-6xl mx-auto relative z-10 content-container">
+              <div class="grid md:grid-cols-2 gap-12 max-w-4xl mx-auto">
+                <!-- Bride -->
+                <div class="text-center scroll-reveal">
+                  <div style="background: linear-gradient(135deg, ${secondaryColor}, ${bgColor});" class="w-48 h-48 rounded-full mx-auto mb-6 flex items-center justify-center">
+                    <svg width="120" height="120" viewBox="0 0 120 120">
+                      <circle cx="60" cy="45" r="25" fill="${primaryColor}" opacity="0.3"/>
+                      <path d="M30 90 Q60 110 90 90 L90 120 L30 120 Z" fill="${primaryColor}" opacity="0.3"/>
+                    </svg>
+                  </div>
+                  
+                  <h2 style="color: ${primaryColor}; font-size: ${fontSize * 2.5}px;" class="font-cormorant mb-2">${config.bride_name || defaultConfig.bride_name}</h2>
+                  <p style="color: ${textColor}; font-family: ${customFont}; font-size: ${fontSize * 0.875}px;" class="mb-2 opacity-70">${config.bride_child || defaultConfig.bride_child}</p>
+                  <p style="color: ${textColor}; font-family: ${customFont}; font-size: ${fontSize}px;" class="font-semibold mb-3">${config.bride_parents || defaultConfig.bride_parents}</p>
+                  <a href="${config.instagram_bride || defaultConfig.instagram_bride}" target="_blank" rel="noopener noreferrer" style="color: ${primaryColor};" class="inline-flex items-center gap-2 hover:opacity-80">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                    </svg>
+                    <span style="font-family: ${customFont}; font-size: ${fontSize * 0.875}px;">@${config.bride_nickname || defaultConfig.bride_nickname}</span>
+                  </a>
+                </div>
+
+                <!-- Groom -->
+                <div class="text-center scroll-reveal">
+                  <div style="background: linear-gradient(135deg, ${secondaryColor}, ${bgColor});" class="w-48 h-48 rounded-full mx-auto mb-6 flex items-center justify-center">
+                    <svg width="120" height="120" viewBox="0 0 120 120">
+                      <circle cx="60" cy="45" r="25" fill="${primaryColor}" opacity="0.3"/>
+                      <rect x="40" y="70" width="40" height="50" fill="${primaryColor}" opacity="0.3"/>
+                    </svg>
+                  </div>
+                  
+                  <h2 style="color: ${primaryColor}; font-size: ${fontSize * 2.5}px;" class="font-cormorant mb-2">${config.groom_name || defaultConfig.groom_name}</h2>
+                  <p style="color: ${textColor}; font-family: ${customFont}; font-size: ${fontSize * 0.875}px;" class="mb-2 opacity-70">${config.groom_child || defaultConfig.groom_child}</p>
+                  <p style="color: ${textColor}; font-family: ${customFont}; font-size: ${fontSize}px;" class="font-semibold mb-3">${config.groom_parents || defaultConfig.groom_parents}</p>
+                  <a href="${config.instagram_groom || defaultConfig.instagram_groom}" target="_blank" rel="noopener noreferrer" style="color: ${primaryColor};" class="inline-flex items-center gap-2 hover:opacity-80">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                    </svg>
+                    <span style="font-family: ${customFont}; font-size: ${fontSize * 0.875}px;">@${config.groom_nickname || defaultConfig.groom_nickname}</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- 5. Countdown Section -->
+          <section class="py-20 px-6 relative overflow-hidden bg-pattern">
+            <div class="absolute inset-0" style="background: linear-gradient(to bottom, ${bgColor} 0%, ${bgColor} 85%, ${surfaceColor} 100%); opacity: 0.85;"></div>
+            
+            <!-- Bunga Kiri Atas -->
+            <div class="flower-decoration left top-left" style="animation: floatGently 4s ease-in-out infinite, flowerFadeIn 1s ease-out; animation-delay: 0.3s;">
+              <img src="https://raw.githubusercontent.com/ahmadhfiz0-code/Asset-1/main/Desain%20tanpa%20judul_20251230_143205_0000.png" alt="" loading="eager">
+            </div>
+            <!-- Bunga Kiri Bawah -->
+            <div class="flower-decoration left bottom-left" style="animation: floatGently 4s ease-in-out infinite, flowerFadeIn 1s ease-out; animation-delay: 1.3s;">
+              <img src="https://raw.githubusercontent.com/ahmadhfiz0-code/Asset-1/main/Desain%20tanpa%20judul_20251230_143205_0000.png" alt="" loading="eager">
+            </div>
+            
+            <!-- Bunga Kanan Atas -->
+            <div class="flower-decoration right top-right" style="animation: floatGently 4s ease-in-out infinite, flowerFadeInRight 1s ease-out; animation-delay: 0.6s;">
+              <img src="https://raw.githubusercontent.com/ahmadhfiz0-code/Asset-1/main/Desain%20tanpa%20judul_20251230_143205_0000.png" alt="" loading="eager">
+            </div>
+            <!-- Bunga Kanan Bawah -->
+            <div class="flower-decoration right bottom-right" style="animation: floatGently 4s ease-in-out infinite, flowerFadeInRight 1s ease-out; animation-delay: 1.6s;">
+              <img src="https://raw.githubusercontent.com/ahmadhfiz0-code/Asset-1/main/Desain%20tanpa%20judul_20251230_143205_0000.png" alt="" loading="eager">
+            </div>
+            
+            <div class="max-w-4xl mx-auto text-center relative z-10 content-container">
+              <h2 style="color: ${primaryColor}; font-size: ${fontSize * 2.5}px;" class="font-header mb-12 scroll-reveal">Save The Date</h2>
+              
+              <div class="grid grid-cols-4 gap-3 scroll-reveal">
+                ${['days', 'hours', 'minutes', 'seconds'].map((unit, i) => `
+                  <div style="background: rgba(26, 47, 66, 0.4); backdrop-filter: blur(10px); border: 2px solid ${primaryColor}; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);" class="rounded-2xl p-4 hover:transform hover:-translate-y-2 transition-all">
+                    <div id="${unit}" style="color: ${primaryColor}; font-family: ${customFont}; font-size: ${fontSize * 2.25}px;" class="font-bold mb-1">00</div>
+                    <div style="color: ${textColor}; font-family: ${customFont}; font-size: ${fontSize * 0.75}px;" class="uppercase tracking-wider opacity-70">${unit === 'days' ? 'Hari' : unit === 'hours' ? 'Jam' : unit === 'minutes' ? 'Menit' : 'Detik'}</div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          </section>
+
+          <!-- 6. Event Details (Akad & Resepsi) -->
+          <section class="py-20 px-6 relative overflow-hidden bg-pattern">
+            <div class="absolute inset-0" style="background: linear-gradient(to bottom, ${surfaceColor} 0%, ${surfaceColor} 85%, ${bgColor} 100%); opacity: 0.85;"></div>
+            
+            <!-- Bunga Kiri Atas -->
+            <div class="flower-decoration left top-left" style="animation: floatGently 4s ease-in-out infinite, flowerFadeIn 1s ease-out; animation-delay: 0.1s;">
+              <img src="https://raw.githubusercontent.com/ahmadhfiz0-code/Asset-1/main/Desain%20tanpa%20judul_20251230_143205_0000.png" alt="" loading="eager">
+            </div>
+            <!-- Bunga Kiri Bawah -->
+            <div class="flower-decoration left bottom-left" style="animation: floatGently 4s ease-in-out infinite, flowerFadeIn 1s ease-out; animation-delay: 1.1s;">
+              <img src="https://raw.githubusercontent.com/ahmadhfiz0-code/Asset-1/main/Desain%20tanpa%20judul_20251230_143205_0000.png" alt="" loading="eager">
+            </div>
+            
+            <!-- Bunga Kanan Atas -->
+            <div class="flower-decoration right top-right" style="animation: floatGently 4s ease-in-out infinite, flowerFadeInRight 1s ease-out; animation-delay: 0.4s;">
+              <img src="https://raw.githubusercontent.com/ahmadhfiz0-code/Asset-1/main/Desain%20tanpa%20judul_20251230_143205_0000.png" alt="" loading="eager">
+            </div>
+            <!-- Bunga Kanan Bawah -->
+            <div class="flower-decoration right bottom-right" style="animation: floatGently 4s ease-in-out infinite, flowerFadeInRight 1s ease-out; animation-delay: 1.4s;">
+              <img src="https://raw.githubusercontent.com/ahmadhfiz0-code/Asset-1/main/Desain%20tanpa%20judul_20251230_143205_0000.png" alt="" loading="eager">
+            </div>
+            
+            <div class="max-w-4xl mx-auto relative z-10 content-container">
+              <div class="grid md:grid-cols-2 gap-8 mb-12">
+                <!-- Akad -->
+                <div style="background: rgba(10, 25, 41, 0.5); backdrop-filter: blur(12px); border: 2px solid ${primaryColor}; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);" class="rounded-2xl p-8 text-center scroll-reveal hover:transform hover:-translate-y-2 transition-all">
+                  <div style="color: ${primaryColor};" class="mb-4">
+                    <svg class="mx-auto" width="60" height="60" viewBox="0 0 60 60" fill="none">
+                      <circle cx="30" cy="30" r="25" stroke="currentColor" stroke-width="2"/>
+                      <path d="M30 15 L30 30 L40 40" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                  </div>
+                  <h3 style="color: ${primaryColor}; font-size: ${fontSize * 1.5}px;" class="font-header mb-4">Akad Nikah</h3>
+                  <p style="color: ${textColor}; font-family: ${customFont}; font-size: ${fontSize}px;" class="mb-2">${config.akad_date || defaultConfig.akad_date}</p>
+                  <p style="color: ${textColor}; font-family: ${customFont}; font-size: ${fontSize}px;" class="font-semibold mb-6">${config.akad_time || defaultConfig.akad_time}</p>
+                  
+                  <div style="color: ${primaryColor};" class="mb-4">
+                    <svg class="mx-auto" width="40" height="40" viewBox="0 0 60 60" fill="none">
+                      <path d="M30 10 C20 10 12 18 12 28 C12 38 30 50 30 50 C30 50 48 38 48 28 C48 18 40 10 30 10 Z" stroke="currentColor" stroke-width="2"/>
+                      <circle cx="30" cy="28" r="6" fill="currentColor"/>
+                    </svg>
+                  </div>
+                  <h4 style="color: ${textColor}; font-family: ${customFont}; font-size: ${fontSize * 1.125}px;" class="font-semibold mb-2">${config.venue_name || defaultConfig.venue_name}</h4>
+                  <p style="color: ${textColor}; font-family: ${customFont}; font-size: ${fontSize * 0.875}px;" class="mb-4 opacity-70">${config.venue_address || defaultConfig.venue_address}</p>
+                  <a href="${config.maps_url || defaultConfig.maps_url}" target="_blank" rel="noopener noreferrer" style="background-color: ${primaryColor}; color: ${surfaceColor}; font-family: ${customFont}; font-size: ${fontSize * 0.875}px;" class="inline-block px-6 py-3 rounded-full hover-lift shadow-md">
+                    Lihat Lokasi
+                  </a>
+                </div>
+
+                <!-- Resepsi -->
+                <div style="background: rgba(10, 25, 41, 0.5); backdrop-filter: blur(12px); border: 2px solid ${primaryColor}; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);" class="rounded-2xl p-8 text-center scroll-reveal hover:transform hover:-translate-y-2 transition-all">
+                  <div style="color: ${primaryColor};" class="mb-4">
+                    <svg class="mx-auto" width="60" height="60" viewBox="0 0 60 60" fill="none">
+                      <path d="M15 25 L30 10 L45 25 L45 50 L15 50 Z" stroke="currentColor" stroke-width="2" fill="none"/>
+                      <rect x="25" y="35" width="10" height="15" stroke="currentColor" stroke-width="2" fill="none"/>
+                    </svg>
+                  </div>
+                  <h3 style="color: ${primaryColor}; font-size: ${fontSize * 1.5}px;" class="font-header mb-4">Resepsi</h3>
+                  <p style="color: ${textColor}; font-family: ${customFont}; font-size: ${fontSize}px;" class="mb-2">${config.resepsi_date || defaultConfig.resepsi_date}</p>
+                  <p style="color: ${textColor}; font-family: ${customFont}; font-size: ${fontSize}px;" class="font-semibold mb-6">${config.resepsi_time || defaultConfig.resepsi_time}</p>
+                  
+                  <div style="color: ${primaryColor};" class="mb-4">
+                    <svg class="mx-auto" width="40" height="40" viewBox="0 0 60 60" fill="none">
+                      <path d="M30 10 C20 10 12 18 12 28 C12 38 30 50 30 50 C30 50 48 38 48 28 C48 18 40 10 30 10 Z" stroke="currentColor" stroke-width="2"/>
+                      <circle cx="30" cy="28" r="6" fill="currentColor"/>
+                    </svg>
+                  </div>
+                  <h4 style="color: ${textColor}; font-family: ${customFont}; font-size: ${fontSize * 1.125}px;" class="font-semibold mb-2">${config.venue_name_resepsi || defaultConfig.venue_name_resepsi}</h4>
+                  <p style="color: ${textColor}; font-family: ${customFont}; font-size: ${fontSize * 0.875}px;" class="mb-4 opacity-70">${config.venue_address_resepsi || defaultConfig.venue_address_resepsi}</p>
+                  <a href="${config.maps_url_resepsi || defaultConfig.maps_url_resepsi}" target="_blank" rel="noopener noreferrer" style="background-color: ${primaryColor}; color: ${surfaceColor}; font-family: ${customFont}; font-size: ${fontSize * 0.875}px;" class="inline-block px-6 py-3 rounded-full hover-lift shadow-md">
+                    Lihat Lokasi
+                  </a>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- 7. Gallery Section -->
+          <section class="py-20 px-6 relative overflow-hidden bg-pattern">
+            <div class="absolute inset-0" style="background: linear-gradient(to bottom, ${bgColor} 0%, ${bgColor} 85%, ${surfaceColor} 100%); opacity: 0.85;"></div>
+            
+            <!-- Bunga Kiri Atas -->
+            <div class="flower-decoration left top-left" style="animation: floatGently 4s ease-in-out infinite, flowerFadeIn 1s ease-out; animation-delay: 0.6s;">
+              <img src="https://raw.githubusercontent.com/ahmadhfiz0-code/Asset-1/main/Desain%20tanpa%20judul_20251230_143205_0000.png" alt="" loading="eager">
+            </div>
+            <!-- Bunga Kiri Bawah -->
+            <div class="flower-decoration left bottom-left" style="animation: floatGently 4s ease-in-out infinite, flowerFadeIn 1s ease-out; animation-delay: 1.6s;">
+              <img src="https://raw.githubusercontent.com/ahmadhfiz0-code/Asset-1/main/Desain%20tanpa%20judul_20251230_143205_0000.png" alt="" loading="eager">
+            </div>
+            
+            <!-- Bunga Kanan Atas -->
+            <div class="flower-decoration right top-right" style="animation: floatGently 4s ease-in-out infinite, flowerFadeInRight 1s ease-out; animation-delay: 0.9s;">
+              <img src="https://raw.githubusercontent.com/ahmadhfiz0-code/Asset-1/main/Desain%20tanpa%20judul_20251230_143205_0000.png" alt="" loading="eager">
+            </div>
+            <!-- Bunga Kanan Bawah -->
+            <div class="flower-decoration right bottom-right" style="animation: floatGently 4s ease-in-out infinite, flowerFadeInRight 1s ease-out; animation-delay: 1.9s;">
+              <img src="https://raw.githubusercontent.com/ahmadhfiz0-code/Asset-1/main/Desain%20tanpa%20judul_20251230_143205_0000.png" alt="" loading="eager">
+            </div>
+            
+            <div class="max-w-5xl mx-auto relative z-10 content-container">
+              <h2 style="color: ${primaryColor}; font-size: ${fontSize * 2.5}px;" class="font-header text-center mb-4 scroll-reveal">Our Gallery</h2>
+              <p style="color: ${textColor}; font-family: ${customFont}; font-size: ${fontSize}px;" class="text-center mb-12 opacity-70 scroll-fade">Momen indah kami bersama</p>
+              
+              <div class="grid grid-cols-2 gap-4 max-w-3xl mx-auto">
+                ${[1, 2, 3, 4].map(i => `
+                  <div class="overflow-hidden rounded-2xl scroll-reveal hover:transform hover:-translate-y-2 transition-all" style="background: rgba(26, 47, 66, 0.4); backdrop-filter: blur(10px); border: 2px solid ${primaryColor}; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);">
+                    <div class="aspect-[3/4] flex items-center justify-center p-8">
+                      <svg width="100%" height="100%" viewBox="0 0 300 400" class="opacity-30">
+                        <rect x="50" y="80" width="200" height="240" rx="120" fill="${primaryColor}" opacity="0.3"/>
+                        <circle cx="150" cy="140" r="40" fill="${primaryColor}" opacity="0.5"/>
+                        <path d="M100 200 Q150 250 200 200" stroke="${primaryColor}" stroke-width="3" fill="none" opacity="0.5"/>
+                        <text x="150" y="350" text-anchor="middle" style="font-family: ${customFont}; font-size: 20px; fill: ${textColor}; opacity: 0.7;">Photo ${i}</text>
+                      </svg>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          </section>
+
+          <!-- 8. Love Story Section -->
+          <section class="py-20 px-6 relative overflow-hidden bg-pattern">
+            <div class="absolute inset-0" style="background: linear-gradient(to bottom, ${surfaceColor} 0%, ${surfaceColor} 85%, ${bgColor} 100%); opacity: 0.85;"></div>
+            
+            <!-- Bunga Kiri Atas -->
+            <div class="flower-decoration left top-left" style="animation: floatGently 4s ease-in-out infinite, flowerFadeIn 1s ease-out; animation-delay: 0.5s;">
+              <img src="https://raw.githubusercontent.com/ahmadhfiz0-code/Asset-1/main/Desain%20tanpa%20judul_20251230_143205_0000.png" alt="" loading="eager">
+            </div>
+            <!-- Bunga Kiri Bawah -->
+            <div class="flower-decoration left bottom-left" style="animation: floatGently 4s ease-in-out infinite, flowerFadeIn 1s ease-out; animation-delay: 1.5s;">
+              <img src="https://raw.githubusercontent.com/ahmadhfiz0-code/Asset-1/main/Desain%20tanpa%20judul_20251230_143205_0000.png" alt="" loading="eager">
+            </div>
+            
+            <!-- Bunga Kanan Atas -->
+            <div class="flower-decoration right top-right" style="animation: floatGently 4s ease-in-out infinite, flowerFadeInRight 1s ease-out; animation-delay: 0.8s;">
+              <img src="https://raw.githubusercontent.com/ahmadhfiz0-code/Asset-1/main/Desain%20tanpa%20judul_20251230_143205_0000.png" alt="" loading="eager">
+            </div>
+            <!-- Bunga Kanan Bawah -->
+            <div class="flower-decoration right bottom-right" style="animation: floatGently 4s ease-in-out infinite, flowerFadeInRight 1s ease-out; animation-delay: 1.8s;">
+              <img src="https://raw.githubusercontent.com/ahmadhfiz0-code/Asset-1/main/Desain%20tanpa%20judul_20251230_143205_0000.png" alt="" loading="eager">
+            </div>
+            
+            <div class="max-w-4xl mx-auto relative z-10 content-container">
+              <h2 style="color: ${primaryColor}; font-size: ${fontSize * 2.5}px;" class="font-header text-center mb-4 scroll-reveal">Our Love Story</h2>
+              <p style="color: ${textColor}; font-family: ${customFont}; font-size: ${fontSize}px;" class="text-center mb-12 opacity-70 scroll-reveal">Perjalanan cinta kami</p>
+              
+              <div class="space-y-8">
+                ${[
+                  { year: '2018', title: 'Awal Pertemuan', text: 'Tak pernah kami sangka, pertemuan sederhana di tahun ini menjadi awal dari kisah panjang yang penuh makna.' },
+                  { year: '2020', title: 'Ujian dan Pembuktian', text: 'Tahun yang tidak mudah bagi siapa pun, termasuk kami. Namun justru dari sanalah kami belajar arti kesabaran dan komitmen.' },
+                  { year: '2023', title: 'Mengikat Janji', text: 'Dengan penuh doa dan harapan, kami mengikrarkan janji suci pernikahan.' }
+                ].map((story, i) => `
+                  <div class="flex gap-6 scroll-reveal">
+                    <div class="flex flex-col items-center">
+                      <div style="background-color: ${primaryColor};" class="w-4 h-4 rounded-full"></div>
+                      ${i < 2 ? `<div style="background-color: ${secondaryColor};" class="w-0.5 h-full"></div>` : ''}
+                    </div>
+                    <div class="flex-1 pb-8">
+                      <h3 style="color: ${primaryColor}; font-size: ${fontSize * 1.25}px;" class="font-header mb-2">${story.year} • ${story.title}</h3>
+                      <p style="color: ${textColor}; font-family: ${customFont}; font-size: ${fontSize}px;" class="leading-relaxed">${story.text}</p>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          </section>
+
+          <!-- 9. Gift & RSVP Section (Combined) -->
+          <section class="py-20 px-6 relative overflow-hidden bg-pattern">
+            <div class="absolute inset-0" style="background: linear-gradient(to bottom, ${bgColor} 0%, ${bgColor} 85%, ${surfaceColor} 100%); opacity: 0.85;"></div>
+            
+            <!-- Bunga Kiri Atas -->
+            <div class="flower-decoration left top-left" style="animation: floatGently 4s ease-in-out infinite, flowerFadeIn 1s ease-out; animation-delay: 0.2s;">
+              <img src="https://raw.githubusercontent.com/ahmadhfiz0-code/Asset-1/main/Desain%20tanpa%20judul_20251230_143205_0000.png" alt="" loading="eager">
+            </div>
+            <!-- Bunga Kiri Bawah -->
+            <div class="flower-decoration left bottom-left" style="animation: floatGently 4s ease-in-out infinite, flowerFadeIn 1s ease-out; animation-delay: 1.2s;">
+              <img src="https://raw.githubusercontent.com/ahmadhfiz0-code/Asset-1/main/Desain%20tanpa%20judul_20251230_143205_0000.png" alt="" loading="eager">
+            </div>
+            
+            <!-- Bunga Kanan Atas -->
+            <div class="flower-decoration right top-right" style="animation: floatGently 4s ease-in-out infinite, flowerFadeInRight 1s ease-out; animation-delay: 0.5s;">
+              <img src="https://raw.githubusercontent.com/ahmadhfiz0-code/Asset-1/main/Desain%20tanpa%20judul_20251230_143205_0000.png" alt="" loading="eager">
+            </div>
+            <!-- Bunga Kanan Bawah -->
+            <div class="flower-decoration right bottom-right" style="animation: floatGently 4s ease-in-out infinite, flowerFadeInRight 1s ease-out; animation-delay: 1.5s;">
+              <img src="https://raw.githubusercontent.com/ahmadhfiz0-code/Asset-1/main/Desain%20tanpa%20judul_20251230_143205_0000.png" alt="" loading="eager">
+            </div>
+            
+            <div class="max-w-3xl mx-auto relative z-10 content-container">
+              <!-- Gift Section -->
+              <div class="text-center mb-16 scroll-reveal">
+                <h2 style="color: ${primaryColor}; font-size: ${fontSize * 2.5}px;" class="font-header mb-4">Kirim Hadiah</h2>
+                <p style="color: ${textColor}; font-family: ${customFont}; font-size: ${fontSize}px;" class="mb-10 leading-relaxed">Doa restu Anda adalah hadiah terindah bagi kami. Namun jika memberi adalah ungkapan tanda kasih, Anda dapat memberi kado secara digital.</p>
+                
+                <!-- Tombol Kirim Hadiah -->
+                <button id="showGiftBtn" style="background-color: ${primaryColor}; color: ${surfaceColor}; font-family: ${customFont}; font-size: ${fontSize}px;" class="mb-8 px-10 py-4 rounded-full shadow-lg font-medium inline-flex items-center gap-2 hover:opacity-90 transition-opacity">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="8" width="18" height="4" rx="1"/>
+                    <path d="M12 8v13"/>
+                    <path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/>
+                    <path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5"/>
+                  </svg>
+                  Kirim Hadiah
+                </button>
+                
+                <div id="giftAccounts" class="hidden space-y-6 max-w-lg mx-auto">
+                  <!-- Rekening Mempelai Pria - BCA -->
+                  <div style="background: rgba(26, 47, 66, 0.5); backdrop-filter: blur(12px); border: 2px solid ${primaryColor}; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);" class="rounded-xl p-6">
+                    <div class="mb-4 flex justify-center">
+                      <img src="https://raw.githubusercontent.com/ahmadhfiz0-code/Asset-1/main/logo-bca-biru-1687975058.webp" alt="BCA Logo" style="width: 80px; height: auto;" onerror="this.style.display='none';">
+                    </div>
+                    <h4 style="color: ${textColor}; font-family: ${customFont}; font-size: ${fontSize}px;" class="text-center font-semibold mb-3">Mempelai Pria</h4>
+                    <div style="background-color: ${bgColor}; border: 1px dashed ${primaryColor};" class="rounded-lg p-4 mb-4 text-center">
+                      <p style="color: ${primaryColor}; font-family: ${customFont}; font-size: ${fontSize * 1.5}px;" class="font-bold mb-1">${config.rekening_pria || defaultConfig.rekening_pria}</p>
+                      <p style="color: ${textColor}; font-family: ${customFont}; font-size: ${fontSize * 0.875}px;" class="opacity-70">a.n. ${config.groom_nickname || defaultConfig.groom_nickname}</p>
+                    </div>
+                    <button onclick="copyRekening('${config.rekening_pria || defaultConfig.rekening_pria}', 'pria')" style="background-color: ${primaryColor}; color: ${surfaceColor}; font-family: ${customFont}; font-size: ${fontSize * 0.875}px;" class="w-full py-3 rounded-lg hover:opacity-90 font-medium">
+                      Salin Nomor Rekening
+                    </button>
+                  </div>
+
+                  <!-- Rekening Mempelai Wanita - DANA -->
+                  <div style="background: rgba(26, 47, 66, 0.5); backdrop-filter: blur(12px); border: 2px solid ${primaryColor}; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);" class="rounded-xl p-6">
+                    <div class="mb-4 flex justify-center">
+                      <img src="https://raw.githubusercontent.com/ahmadhfiz0-code/Asset-1/main/dana-meta-logo-1688127790.png" alt="DANA Logo" style="width: 80px; height: auto;" onerror="this.style.display='none';">
+                    </div>
+                    <h4 style="color: ${textColor}; font-family: ${customFont}; font-size: ${fontSize}px;" class="text-center font-semibold mb-3">Mempelai Wanita</h4>
+                    <div style="background-color: ${bgColor}; border: 1px dashed ${primaryColor};" class="rounded-lg p-4 mb-4 text-center">
+                      <p style="color: ${primaryColor}; font-family: ${customFont}; font-size: ${fontSize * 1.5}px;" class="font-bold mb-1">${config.rekening_wanita || defaultConfig.rekening_wanita}</p>
+                      <p style="color: ${textColor}; font-family: ${customFont}; font-size: ${fontSize * 0.875}px;" class="opacity-70">a.n. ${config.bride_nickname || defaultConfig.bride_nickname}</p>
+                    </div>
+                    <button onclick="copyRekening('${config.rekening_wanita || defaultConfig.rekening_wanita}', 'wanita')" style="background-color: ${primaryColor}; color: ${surfaceColor}; font-family: ${customFont}; font-size: ${fontSize * 0.875}px;" class="w-full py-3 rounded-lg hover:opacity-90 font-medium">
+                      Salin Nomor Rekening
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- RSVP Section -->
+              <div class="scroll-reveal">
+                <div class="text-center mb-12">
+                  <h2 style="color: ${primaryColor}; font-size: ${fontSize * 2.5}px;" class="font-header mb-6">Ucapan & Doa</h2>
+                </div>
+
+                <!-- RSVP Form -->
+                <div style="background: rgba(26, 47, 66, 0.5); backdrop-filter: blur(12px); border: 2px solid ${primaryColor}; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);" class="rounded-2xl p-8 mb-8">
+                  <form id="rsvpForm" class="space-y-5">
+                    <div>
+                      <label for="guestName" style="color: ${textColor}; font-family: ${customFont}; font-size: ${fontSize * 0.875}px;" class="block mb-2 font-medium">Nama Lengkap *</label>
+                      <input type="text" id="guestName" required style="border-color: ${secondaryColor}; font-family: ${customFont}; font-size: ${fontSize}px; color: ${textColor}; background-color: ${bgColor};" class="w-full p-3 border-2 rounded-lg focus:outline-none" placeholder="Masukkan nama Anda">
+                    </div>
+                    
+                    <div class="grid md:grid-cols-2 gap-4">
+                      <div>
+                        <label for="guestCount" style="color: ${textColor}; font-family: ${customFont}; font-size: ${fontSize * 0.875}px;" class="block mb-2 font-medium">Jumlah Tamu *</label>
+                        <select id="guestCount" required style="border-color: ${secondaryColor}; font-family: ${customFont}; font-size: ${fontSize}px; color: ${textColor}; background-color: ${bgColor};" class="w-full p-3 border-2 rounded-lg focus:outline-none">
+                          <option value="1">1 Orang</option>
+                          <option value="2">2 Orang</option>
+                          <option value="3">3 Orang</option>
+                          <option value="4">4 Orang</option>
+                          <option value="5">5+ Orang</option>
+                        </select>
+                      </div>
+                      
+                      <div>
+                        <label for="attendanceStatus" style="color: ${textColor}; font-family: ${customFont}; font-size: ${fontSize * 0.875}px;" class="block mb-2 font-medium">Konfirmasi Kehadiran *</label>
+                        <select id="attendanceStatus" required style="border-color: ${secondaryColor}; font-family: ${customFont}; font-size: ${fontSize}px; color: ${textColor}; background-color: ${bgColor};" class="w-full p-3 border-2 rounded-lg focus:outline-none">
+                          <option value="hadir">✓ Hadir</option>
+                          <option value="tidak-hadir">✗ Tidak Hadir</option>
+                          <option value="masih-ragu">? Masih Ragu</option>
+                        </select>
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <label for="guestMessage" style="color: ${textColor}; font-family: ${customFont}; font-size: ${fontSize * 0.875}px;" class="block mb-2 font-medium">Ucapan & Doa *</label>
+                      <textarea id="guestMessage" rows="4" required style="border-color: ${secondaryColor}; font-family: ${customFont}; font-size: ${fontSize}px; color: ${textColor}; background-color: ${bgColor};" class="w-full p-3 border-2 rounded-lg focus:outline-none resize-none" placeholder="Tulis ucapan dan doa untuk kami..."></textarea>
+                    </div>
+                    
+                    <button type="submit" id="submitRsvp" style="background-color: ${primaryColor}; color: ${surfaceColor}; font-family: ${customFont}; font-size: ${fontSize}px;" class="w-full py-4 rounded-lg font-medium hover:opacity-90 transition-opacity shadow-md">
+                      Kirim Ucapan & Doa
+                    </button>
+                  </form>
+                </div>
+
+                <!-- Comments Section -->
+                <div class="text-center mb-6">
+                  <button id="toggleComments" style="color: ${primaryColor}; border: 2px solid ${primaryColor}; font-family: ${customFont}; font-size: ${fontSize}px; background-color: transparent;" class="px-8 py-3 rounded-full shadow-md font-medium inline-flex items-center gap-2 hover:opacity-90 transition-opacity">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                    <span id="commentBtnText">Buka Komentar</span>
+                    <span id="commentCount" style="background-color: ${primaryColor}; color: ${surfaceColor};" class="px-2 py-0.5 rounded-full text-sm">0</span>
+                  </button>
+                </div>
+
+                <!-- Comments List -->
+                <div id="commentsList" class="hidden space-y-4">
+                  <div id="commentsContainer" class="space-y-4 max-h-[600px] overflow-y-auto">
+                    <!-- Comments will be inserted here -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Closing Section & Footer -->
+          <section class="min-h-screen py-20 px-6 text-center scroll-reveal relative overflow-hidden bg-pattern">
+            <div class="absolute inset-0" style="background: linear-gradient(to bottom, ${surfaceColor} 0%, ${surfaceColor} 85%, ${bgColor} 100%); opacity: 0.85;"></div>
+            
+            <!-- Bunga Kiri Atas -->
+            <div class="flower-decoration left" style="top: 80px; left: -60px; animation: floatGently 4s ease-in-out infinite, flowerFadeIn 1s ease-out; animation-delay: 0.3s;">
+              <img src="https://raw.githubusercontent.com/ahmadhfiz0-code/Asset-1/main/Desain%20tanpa%20judul_20251230_143205_0000.png" alt="" loading="eager">
+            </div>
+            <!-- Bunga Kiri Bawah -->
+            <div class="flower-decoration left" style="bottom: 120px; left: -60px; animation: floatGently 4s ease-in-out infinite, flowerFadeIn 1s ease-out; animation-delay: 1.3s;">
+              <img src="https://raw.githubusercontent.com/ahmadhfiz0-code/Asset-1/main/Desain%20tanpa%20judul_20251230_143205_0000.png" alt="" loading="eager">
+            </div>
+            
+            <!-- Bunga Kanan Atas -->
+            <div class="flower-decoration right" style="top: 80px; right: -60px; animation: floatGently 4s ease-in-out infinite, flowerFadeInRight 1s ease-out; animation-delay: 0.6s;">
+              <img src="https://raw.githubusercontent.com/ahmadhfiz0-code/Asset-1/main/Desain%20tanpa%20judul_20251230_143205_0000.png" alt="" loading="eager">
+            </div>
+            <!-- Bunga Kanan Bawah -->
+            <div class="flower-decoration right" style="bottom: 120px; right: -60px; animation: floatGently 4s ease-in-out infinite, flowerFadeInRight 1s ease-out; animation-delay: 1.6s;">
+              <img src="https://raw.githubusercontent.com/ahmadhfiz0-code/Asset-1/main/Desain%20tanpa%20judul_20251230_143205_0000.png" alt="" loading="eager">
+            </div>
+            
+            <div class="max-w-2xl mx-auto relative z-10">
+              <!-- Foto Mempelai - Frame Oval Vertikal Panjang -->
+              <div class="mb-12">
+                <div class="mx-auto mb-6 flex items-center justify-center overflow-hidden shadow-2xl rounded-full" 
+                     style="width: 110px; height: 180px; background: linear-gradient(135deg, ${secondaryColor}, ${bgColor}); border: 3px solid ${primaryColor};">
+                  <svg width="100%" height="100%" viewBox="0 0 110 180" class="opacity-40">
+                    <!-- Ornamen Minimalis -->
+                    <ellipse cx="55" cy="90" rx="35" ry="65" fill="${primaryColor}" opacity="0.3"/>
+                    <circle cx="55" cy="90" r="28" fill="${primaryColor}" opacity="0.2"/>
+                    
+                    <!-- Hiasan Love di tengah -->
+                    <path d="M55 68 Q51 62 48.5 62 Q46 62 46 67 Q46 72 55 80 Q64 72 64 67 Q64 62 61.5 62 Q59 62 55 68" fill="${primaryColor}" opacity="0.6"/>
+                    
+                    <!-- Ornamen dekoratif -->
+                    <path d="M55 35 Q30 62 55 90 Q80 62 55 35" stroke="${primaryColor}" stroke-width="2.5" fill="none" opacity="0.4"/>
+                  </svg>
+                </div>
+              </div>
+              <p style="color: ${textColor}; font-family: ${customFont}; font-size: ${fontSize * 1.125}px;" class="mb-4 italic">
+                Atas kehadiran dan doa restu dari Bapak/Ibu/Saudara/i, kami mengucapkan terima kasih.
+              </p>
+              <p style="color: ${textColor}; font-family: ${customFont}; font-size: ${fontSize}px;" class="font-semibold mb-6">Wassalamu'alaikum Warahmatullahi Wabarakatuh</p>
+              
+              <div class="w-32 mx-auto my-8">
+                <div class="section-divider" style="color: ${primaryColor};"></div>
+              </div>
+              
+              <p style="color: ${primaryColor}; font-size: ${fontSize * 2}px;" class="font-cormorant mb-12">${config.bride_nickname || defaultConfig.bride_nickname} & ${config.groom_nickname || defaultConfig.groom_nickname}</p>
+              
+              <!-- Footer Content -->
+              <div class="mt-16 pt-8 border-t-2" style="border-color: ${primaryColor}; opacity: 0.3;">
+                <p style="color: ${textColor}; font-family: ${customFont}; font-size: ${fontSize}px;" class="mb-3">Undangan By Myundangan.in</p>
+                <a href="${config.instagram_url || defaultConfig.instagram_url}" target="_blank" rel="noopener noreferrer" style="color: ${textColor}; font-family: ${customFont}; font-size: ${fontSize * 0.875}px;" class="hover:opacity-80 inline-flex items-center gap-2">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                  </svg>
+                  @myundangan.in
+                </a>
+                <p style="color: ${textColor}; font-family: ${customFont}; font-size: ${fontSize * 0.75}px;" class="mt-4 opacity-70">© 2026 - Made with Love</p>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- Opening Animation Cover (rendered last, on top) -->
+        <div id="openingScreen" style="background: url('https://raw.githubusercontent.com/ahmadhfiz0-code/Pengantin/main/0c4851a00f0d5a90236415f520989677.jpg') center/cover no-repeat;" class="fixed inset-0 z-50 flex items-center justify-center overflow-hidden">
+          <!-- Gradasi biru gelap overlay -->
+          <div class="absolute inset-0" style="background: linear-gradient(to bottom, rgba(10, 25, 41, 0.6) 0%, rgba(10, 25, 41, 0.4) 50%, rgba(10, 25, 41, 0.7) 100%);"></div>
+          <div id="particleContainer" class="absolute inset-0"></div>
+          
+          <div class="relative z-10 text-center px-6 animate-scaleIn max-w-4xl mx-auto">
+            <p style="color: ${textColor}; font-family: ${customFont}; font-size: ${fontSize * 0.875}px; text-shadow: 0 2px 8px rgba(0,0,0,0.8), 0 4px 16px rgba(0,0,0,0.6);" class="mb-3 tracking-wider">Kepada Yth.</p>
+            <p style="color: ${primaryColor}; font-family: ${customFont}; font-size: ${fontSize * 1.25}px; text-shadow: 0 2px 8px rgba(0,0,0,0.8), 0 4px 16px rgba(0,0,0,0.6);" class="mb-8 font-semibold">${config.guest_name || defaultConfig.guest_name}</p>
+            
+            <p style="color: ${textColor}; font-family: ${customFont}; font-size: ${fontSize * 0.875}px; text-shadow: 0 2px 8px rgba(0,0,0,0.8), 0 4px 16px rgba(0,0,0,0.6);" class="mb-4 tracking-widest uppercase">The Wedding Of</p>
+            <h1 style="color: ${textColor}; font-size: ${fontSize * 3.5}px; text-shadow: 0 3px 12px rgba(0,0,0,0.9), 0 6px 24px rgba(0,0,0,0.7);" class="font-cormorant mb-2">${config.bride_nickname || defaultConfig.bride_nickname} & ${config.groom_nickname || defaultConfig.groom_nickname}</h1>
+            <p style="color: ${textColor}; font-family: ${customFont}; font-size: ${fontSize}px; text-shadow: 0 2px 8px rgba(0,0,0,0.8), 0 4px 16px rgba(0,0,0,0.6);" class="tracking-widest mb-10">16 . 01 . 2026</p>
+            
+            <button id="openInvitationFirst" style="background-color: ${primaryColor}; color: ${surfaceColor}; font-family: ${customFont}; font-size: ${fontSize}px; box-shadow: 0 4px 16px rgba(0,0,0,0.5);" class="px-10 py-4 rounded-full hover-lift shadow-lg font-medium">
+              Buka Undangan
+            </button>
+          </div>
+        </div>
+
+        <!-- Music Control -->
+        <button id="musicButton" style="background-color: ${primaryColor}; display: none;" class="music-btn w-14 h-14 rounded-full shadow-xl flex items-center justify-center">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 18V5l12-2v13"></path>
+            <circle cx="6" cy="18" r="3" fill="white"></circle>
+            <circle cx="18" cy="16" r="3" fill="white"></circle>
+          </svg>
+        </button>
+
+        <!-- Floating Bubble Images -->
+        <div id="bubbleContainer"></div>
+        
+        <!-- Audio Elements -->
+        <audio id="backgroundMusic" loop>
+          <source src="https://raw.githubusercontent.com/ahmadhfiz0-code/Musik-undangan/main/Rizky%20Febian%20-%20Bermuara%20Preview.mp3" type="audio/mpeg">
+        </audio>
+        
+        <audio id="ayatAudio">
+          <source src="https://raw.githubusercontent.com/ahmadhfiz0-code/Musik-undangan/main/3430.mp3" type="audio/mpeg">
+        </audio>
+      `;
+
+      // Setup event listeners
+      setupEventListeners(config);
+      
+      // Initialize scroll animations
+      initScrollAnimations();
+      
+      // Initialize bubble animations
+      initBubbleAnimations();
+      
+      // Show opening animation if not shown yet
+      if (!animationShown) {
+        animationShown = true;
+        showOpeningAnimation();
+      }
+    }
+
+    function initScrollAnimations() {
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '50px 0px -50px 0px'
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            entry.target.classList.remove('hidden-up');
+          } else {
+            const rect = entry.boundingClientRect;
+            if (rect.top < 0) {
+              entry.target.classList.remove('visible');
+              entry.target.classList.add('hidden-up');
+            } else {
+              entry.target.classList.remove('visible');
+              entry.target.classList.remove('hidden-up');
+            }
+          }
+        });
+      }, observerOptions);
+
+      document.querySelectorAll('.scroll-reveal, .scroll-fade').forEach(el => {
+        observer.observe(el);
+      });
+    }
+
+    function initBubbleAnimations() {
+      const bubbleContainer = document.getElementById('bubbleContainer');
+      if (!bubbleContainer) return;
+
+      bubbleContainer.innerHTML = '';
+
+      // Buat 3 zona yang overlap: kiri (0-40%), tengah (30-70%), kanan (60-100%)
+      const zones = [
+        { start: 0, end: 40 },    // Zona kiri
+        { start: 30, end: 70 },   // Zona tengah
+        { start: 60, end: 100 }   // Zona kanan
+      ];
+
+      // Buat 10 gelembung per zona (total 30)
+      zones.forEach((zone, zoneIndex) => {
+        for (let i = 0; i < 10; i++) {
+          const bubble = document.createElement('div');
+          bubble.className = 'bubble-image';
+          
+          // Pastikan gelembung tersebar di seluruh zona
+          const randomLeft = zone.start + Math.random() * (zone.end - zone.start);
+          
+          // Drift lebih kecil agar tidak keluar dari zona
+          const randomDrift = (Math.random() - 0.5) * 80;
+          const randomDuration = 25 + Math.random() * 20;
+          const randomDelay = Math.random() * 10; // Delay acak agar tidak semua start bersamaan
+          const randomSize = 60 + Math.random() * 40;
+          const swayDuration = 10 + Math.random() * 8;
+          const swayDelay = Math.random() * 5;
+          const rotateDuration = 15 + Math.random() * 15;
+          const rotateDelay = Math.random() * 5;
+          
+          bubble.style.left = `${randomLeft}%`;
+          bubble.style.setProperty('--drift', `${randomDrift}px`);
+          bubble.style.setProperty('--duration', `${randomDuration}s`);
+          bubble.style.setProperty('--delay', `${randomDelay}s`);
+          bubble.style.setProperty('--sway-duration', `${swayDuration}s`);
+          bubble.style.setProperty('--sway-delay', `${swayDelay}s`);
+          bubble.style.setProperty('--rotate-duration', `${rotateDuration}s`);
+          bubble.style.setProperty('--rotate-delay', `${rotateDelay}s`);
+          bubble.style.width = `${randomSize}px`;
+          bubble.style.height = `${randomSize}px`;
+          
+          bubble.innerHTML = `<img src="https://raw.githubusercontent.com/ahmadhfiz0-code/Asset-1/main/Desain%20tanpa%20judul_20251229_122907_0000.png" alt="Floating flower" loading="eager" crossorigin="anonymous">`;
+          
+          bubbleContainer.appendChild(bubble);
+        }
+      });
+      
+      void bubbleContainer.offsetWidth;
+    }
+
+    function setupEventListeners(config) {
+      const openBtnFirst = document.getElementById('openInvitationFirst');
+      const rsvpForm = document.getElementById('rsvpForm');
+      const toggleCommentsBtn = document.getElementById('toggleComments');
+      const musicBtn = document.getElementById('musicButton');
+      const playAyatBtn = document.getElementById('playAyatAudio');
+      const showGiftBtn = document.getElementById('showGiftBtn');
+
+      if (openBtnFirst) openBtnFirst.addEventListener('click', openFromFirstPage);
+      if (rsvpForm) rsvpForm.addEventListener('submit', submitRsvp);
+      if (toggleCommentsBtn) toggleCommentsBtn.addEventListener('click', toggleComments);
+      if (musicBtn) musicBtn.addEventListener('click', toggleMusic);
+      if (playAyatBtn) playAyatBtn.addEventListener('click', toggleAyatAudio);
+      if (showGiftBtn) showGiftBtn.addEventListener('click', toggleGiftAccounts);
+    }
+
+    function showOpeningAnimation() {
+      const opening = document.getElementById('openingScreen');
+      const particleContainer = document.getElementById('particleContainer');
+
+      for (let i = 0; i < 40; i++) {
+        setTimeout(() => {
+          const particle = document.createElement('div');
+          particle.className = 'particle';
+          particle.style.left = Math.random() * 100 + '%';
+          particle.style.top = Math.random() * 100 + '%';
+          particle.style.setProperty('--tx', (Math.random() - 0.5) * 200 + 'px');
+          particle.style.setProperty('--ty', (Math.random() - 0.5) * 200 + 'px');
+          particle.style.animationDelay = Math.random() * 2 + 's';
+          particleContainer.appendChild(particle);
+        }, i * 50);
+      }
+    }
+
+    function openFromFirstPage() {
+      const opening = document.getElementById('openingScreen');
+      const main = document.getElementById('mainContent');
+      const musicBtn = document.getElementById('musicButton');
+      const audio = document.getElementById('backgroundMusic');
+      
+      const bubbles = document.querySelectorAll('.bubble-image');
+      bubbles.forEach(bubble => {
+        bubble.classList.add('active');
+      });
+      
+      // Request fullscreen
+      const elem = document.documentElement;
+      if (elem.requestFullscreen) {
+        elem.requestFullscreen().catch(err => console.log('Fullscreen failed:', err));
+      } else if (elem.webkitRequestFullscreen) {
+        elem.webkitRequestFullscreen().catch(err => console.log('Fullscreen failed:', err));
+      } else if (elem.msRequestFullscreen) {
+        elem.msRequestFullscreen().catch(err => console.log('Fullscreen failed:', err));
+      }
+      
+      // Tampilkan tombol musik terlebih dahulu dengan opacity 0
+      if (musicBtn) {
+        musicBtn.style.display = 'flex';
+        musicBtn.style.opacity = '0';
+        musicBtn.style.transition = 'opacity 0.5s ease-in-out';
+      }
+      
+      // Animasi cover naik tanpa fade out
+      opening.style.transform = 'translateY(-100%)';
+      opening.style.transition = 'transform 1.2s cubic-bezier(0.4, 0.0, 0.2, 1)';
+      
+      // Fade in tombol musik setelah cover mulai naik
+      setTimeout(() => {
+        if (musicBtn) {
+          musicBtn.style.opacity = '1';
+        }
+      }, 400);
+      
+      // Hapus cover dan mulai fitur lainnya setelah animasi selesai
+      setTimeout(() => {
+        opening.style.display = 'none';
+        
+        if (audio) {
+          audio.play().catch(err => console.log('Audio play failed:', err));
+          musicPlaying = true;
+          if (musicBtn) musicBtn.classList.add('playing');
+        }
+        
+        startCountdown();
+        initScrollAnimations();
+        startAutoScroll();
+      }, 1400);
+    }
+
+    function startAutoScroll() {
+      const mainContent = document.getElementById('mainContent');
+      if (!mainContent) return;
+      
+      isAutoScrolling = true;
+      
+      // Scroll otomatis dengan kecepatan lambat dan smooth
+      const scrollSpeed = 1; // pixel per frame
+      
+      function autoScroll() {
+        if (!isAutoScrolling) return;
+        
+        const maxScroll = mainContent.scrollHeight - mainContent.clientHeight;
+        const currentScroll = mainContent.scrollTop;
+        
+        if (currentScroll >= maxScroll) {
+          // Sudah sampai bawah, kembali ke atas
+          mainContent.scrollTo({ top: 0, behavior: 'smooth' });
+          
+          // Tunggu sebentar sebelum mulai scroll lagi
+          setTimeout(() => {
+            if (isAutoScrolling) {
+              startAutoScroll();
+            }
+          }, 3000);
+        } else {
+          mainContent.scrollTop += scrollSpeed;
+          autoScrollInterval = requestAnimationFrame(autoScroll);
+        }
+      }
+      
+      autoScroll();
+      
+      // Stop auto scroll jika user melakukan scroll manual atau touch
+      mainContent.addEventListener('wheel', stopAutoScroll, { passive: true });
+      mainContent.addEventListener('touchstart', stopAutoScroll, { passive: true });
+    }
+
+    function stopAutoScroll() {
+      isAutoScrolling = false;
+      if (autoScrollInterval) {
+        cancelAnimationFrame(autoScrollInterval);
+        autoScrollInterval = null;
+      }
+    }
+
+    function startCountdown() {
+      const targetDate = new Date('2026-01-16T09:00:00').getTime();
+      
+      if (countdownInterval) clearInterval(countdownInterval);
+      
+      countdownInterval = setInterval(() => {
+        const now = new Date().getTime();
+        const distance = targetDate - now;
+        
+        if (distance < 0) {
+          clearInterval(countdownInterval);
+          ['days', 'hours', 'minutes', 'seconds'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.textContent = '00';
+          });
+          return;
+        }
+        
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        
+        const daysEl = document.getElementById('days');
+        const hoursEl = document.getElementById('hours');
+        const minutesEl = document.getElementById('minutes');
+        const secondsEl = document.getElementById('seconds');
+        
+        if (daysEl) daysEl.textContent = String(days).padStart(2, '0');
+        if (hoursEl) hoursEl.textContent = String(hours).padStart(2, '0');
+        if (minutesEl) minutesEl.textContent = String(minutes).padStart(2, '0');
+        if (secondsEl) secondsEl.textContent = String(seconds).padStart(2, '0');
+      }, 1000);
+    }
+
+    async function submitRsvp(e) {
+      e.preventDefault();
+      
+      if (isSubmitting) return;
+      
+      const config = window.elementSdk ? window.elementSdk.config : defaultConfig;
+      const nameInput = document.getElementById('guestName');
+      const countInput = document.getElementById('guestCount');
+      const statusInput = document.getElementById('attendanceStatus');
+      const messageInput = document.getElementById('guestMessage');
+      const submitBtn = document.getElementById('submitRsvp');
+      
+      if (!nameInput || !nameInput.value.trim()) {
+        if (nameInput) {
+          nameInput.style.borderColor = '#dc2626';
+          nameInput.focus();
+        }
+        return;
+      }
+      
+      if (!messageInput || !messageInput.value.trim()) {
+        if (messageInput) {
+          messageInput.style.borderColor = '#dc2626';
+          messageInput.focus();
+        }
+        return;
+      }
+
+      if (comments.length >= 999) {
+        showNotification('Maaf, batas maksimal 999 komentar sudah tercapai 😔');
+        return;
+      }
+      
+      isSubmitting = true;
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span style="font-family: ' + (config.font_family || defaultConfig.font_family) + ', sans-serif; font-size: ' + (config.font_size || defaultConfig.font_size) + 'px;">Mengirim...</span>';
+      }
+      
+      const newComment = {
+        name: nameInput.value.trim(),
+        count: countInput.value,
+        status: statusInput.value,
+        message: messageInput.value.trim(),
+        timestamp: new Date().toISOString()
+      };
+      
+      if (window.dataSdk) {
+        const result = await window.dataSdk.create(newComment);
+        
+        if (result.isOk) {
+          nameInput.value = '';
+          messageInput.value = '';
+          countInput.value = '1';
+          statusInput.value = 'hadir';
+          
+          showNotification('Terima kasih! Ucapan Anda telah dikirim 💙');
+          
+          const commentsList = document.getElementById('commentsList');
+          if (commentsList && !commentsVisible) {
+            toggleComments();
+          }
+          setTimeout(() => {
+            if (commentsList) {
+              commentsList.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+          }, 100);
+        } else {
+          showNotification('Gagal mengirim ucapan. Silakan coba lagi.');
+        }
+      }
+      
+      isSubmitting = false;
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<span style="font-family: ' + (config.font_family || defaultConfig.font_family) + ', sans-serif; font-size: ' + (config.font_size || defaultConfig.font_size) + 'px;">Kirim Ucapan & Doa</span>';
+      }
+    }
+
+    function toggleComments() {
+      const config = window.elementSdk ? window.elementSdk.config : defaultConfig;
+      commentsVisible = !commentsVisible;
+      const commentsList = document.getElementById('commentsList');
+      const btnText = document.getElementById('commentBtnText');
+      
+      if (commentsList) {
+        if (commentsVisible) {
+          commentsList.classList.remove('hidden');
+          if (btnText) btnText.textContent = 'Tutup Komentar';
+          renderComments(config);
+        } else {
+          commentsList.classList.add('hidden');
+          if (btnText) btnText.textContent = 'Buka Komentar';
+        }
+      }
+    }
+
+    function renderComments(config) {
+      const container = document.getElementById('commentsContainer');
+      if (!container) return;
+      
+      const bgColor = config.background_color || defaultConfig.background_color;
+      const surfaceColor = config.surface_color || defaultConfig.surface_color;
+      const textColor = config.text_color || defaultConfig.text_color;
+      const primaryColor = config.primary_action_color || defaultConfig.primary_action_color;
+      const secondaryColor = config.secondary_action_color || defaultConfig.secondary_action_color;
+      const fontFamily = config.font_family || defaultConfig.font_family;
+      const fontSize = config.font_size || defaultConfig.font_size;
+      const customFont = `${fontFamily}, Arial, sans-serif`;
+      
+      if (comments.length === 0) {
+        container.innerHTML = `
+          <div style="background: rgba(26, 47, 66, 0.4); backdrop-filter: blur(10px); border: 2px dashed ${secondaryColor}; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);" class="rounded-xl p-12 text-center">
+            <div style="color: ${primaryColor};" class="mb-4 opacity-30">
+              <svg class="mx-auto" width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+              </svg>
+            </div>
+            <p style="color: ${textColor}; font-family: ${customFont}; font-size: ${fontSize}px;" class="opacity-50">Belum ada ucapan. Jadilah yang pertama!</p>
+          </div>
+        `;
+        return;
+      }
+      
+      container.innerHTML = comments.map(comment => {
+        const date = new Date(comment.timestamp);
+        const timeAgo = getTimeAgo(date);
+        const statusIcon = comment.status === 'hadir' ? '✓' : comment.status === 'tidak-hadir' ? '✗' : '?';
+        const statusText = comment.status === 'hadir' ? 'Hadir' : comment.status === 'tidak-hadir' ? 'Tidak Hadir' : 'Masih Ragu';
+        
+        return `
+          <div style="background: rgba(26, 47, 66, 0.5); backdrop-filter: blur(12px); border-left: 4px solid ${primaryColor}; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);" class="rounded-xl p-6 hover:transform hover:-translate-y-1 transition-all">
+            <div class="flex items-start gap-4">
+              <div style="background: linear-gradient(135deg, ${primaryColor}, ${secondaryColor});" class="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0">
+                <span style="color: ${surfaceColor}; font-family: ${customFont}; font-size: ${fontSize * 1.25}px;" class="font-bold">${comment.name.charAt(0).toUpperCase()}</span>
+              </div>
+              <div class="flex-1 min-w-0">
+                <div class="flex flex-wrap items-center gap-2 mb-1">
+                  <h4 style="color: ${textColor}; font-family: ${customFont}; font-size: ${fontSize * 1.125}px;" class="font-bold">${comment.name}</h4>
+                  <span style="background-color: ${secondaryColor}; color: ${primaryColor}; font-family: ${customFont}; font-size: ${fontSize * 0.75}px;" class="px-2 py-0.5 rounded-full">${statusIcon} ${statusText}</span>
+                  <span style="background-color: ${bgColor}; color: ${textColor}; font-family: ${customFont}; font-size: ${fontSize * 0.75}px;" class="px-2 py-0.5 rounded-full opacity-70">${comment.count} Orang</span>
+                </div>
+                <p style="color: ${textColor}; font-family: ${customFont}; font-size: ${fontSize}px;" class="mb-2 leading-relaxed">${comment.message}</p>
+                <p style="color: ${textColor}; font-family: ${customFont}; font-size: ${fontSize * 0.75}px;" class="opacity-50">${timeAgo}</p>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function getTimeAgo(date) {
+      const seconds = Math.floor((new Date() - date) / 1000);
+      
+      if (seconds < 60) return 'Baru saja';
+      const minutes = Math.floor(seconds / 60);
+      if (minutes < 60) return `${minutes} menit yang lalu`;
+      const hours = Math.floor(minutes / 60);
+      if (hours < 24) return `${hours} jam yang lalu`;
+      const days = Math.floor(hours / 24);
+      if (days < 7) return `${days} hari yang lalu`;
+      const weeks = Math.floor(days / 7);
+      if (weeks < 4) return `${weeks} minggu yang lalu`;
+      const months = Math.floor(days / 30);
+      return `${months} bulan yang lalu`;
+    }
+
+    function toggleMusic() {
+      musicPlaying = !musicPlaying;
+      const btn = document.getElementById('musicButton');
+      const audio = document.getElementById('backgroundMusic');
+      
+      if (audio) {
+        if (musicPlaying) {
+          audio.play().catch(err => console.log('Audio play failed:', err));
+          if (btn) {
+            btn.classList.add('playing');
+          }
+        } else {
+          audio.pause();
+          if (btn) {
+            btn.classList.remove('playing');
+          }
+        }
+      }
+    }
+
+    function toggleAyatAudio() {
+      const audio = document.getElementById('ayatAudio');
+      const bgMusic = document.getElementById('backgroundMusic');
+      const playIcon = document.getElementById('playIcon');
+      const pauseIcon = document.getElementById('pauseIcon');
+      
+      if (!audio) return;
+      
+      if (ayatAudioPlaying) {
+        audio.pause();
+        audio.currentTime = 0;
+        ayatAudioPlaying = false;
+        if (playIcon) playIcon.classList.remove('hidden');
+        if (pauseIcon) pauseIcon.classList.add('hidden');
+        
+        if (musicPlaying && bgMusic) {
+          bgMusic.play().catch(err => console.log('Background music resume failed:', err));
+        }
+      } else {
+        if (bgMusic) {
+          bgMusic.pause();
+        }
+        
+        audio.play().catch(err => console.log('Ayat audio play failed:', err));
+        ayatAudioPlaying = true;
+        if (playIcon) playIcon.classList.add('hidden');
+        if (pauseIcon) pauseIcon.classList.remove('hidden');
+      }
+      
+      audio.addEventListener('ended', () => {
+        ayatAudioPlaying = false;
+        if (playIcon) playIcon.classList.remove('hidden');
+        if (pauseIcon) pauseIcon.classList.add('hidden');
+        
+        if (musicPlaying && bgMusic) {
+          bgMusic.play().catch(err => console.log('Background music resume failed:', err));
+        }
+      });
+    }
+
+    document.addEventListener('visibilitychange', () => {
+      const bgMusic = document.getElementById('backgroundMusic');
+      const ayatAudio = document.getElementById('ayatAudio');
+      
+      if (document.hidden) {
+        if (bgMusic && musicPlaying) {
+          bgMusic.pause();
+        }
+        if (ayatAudio && ayatAudioPlaying) {
+          ayatAudio.pause();
+        }
+      } else {
+        if (bgMusic && musicPlaying && !ayatAudioPlaying) {
+          bgMusic.play().catch(err => console.log('Background music resume failed:', err));
+        }
+        if (ayatAudio && ayatAudioPlaying) {
+          ayatAudio.play().catch(err => console.log('Ayat audio resume failed:', err));
+        }
+      }
+    });
+
+    function toggleGiftAccounts() {
+      const giftAccounts = document.getElementById('giftAccounts');
+      const showGiftBtn = document.getElementById('showGiftBtn');
+      
+      if (giftAccounts && showGiftBtn) {
+        if (giftAccounts.classList.contains('hidden')) {
+          giftAccounts.classList.remove('hidden');
+          showGiftBtn.innerHTML = `
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="18 15 12 9 6 15"></polyline>
+            </svg>
+            Tutup
+          `;
+          setTimeout(() => {
+            giftAccounts.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }, 100);
+        } else {
+          giftAccounts.classList.add('hidden');
+          showGiftBtn.innerHTML = `
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="8" width="18" height="4" rx="1"/>
+              <path d="M12 8v13"/>
+              <path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/>
+              <path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5"/>
+            </svg>
+            Kirim Hadiah
+          `;
+        }
+      }
+    }
+
+    function copyRekening(number, type) {
+      const textarea = document.createElement('textarea');
+      textarea.value = number;
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.select();
+      
+      try {
+        document.execCommand('copy');
+        showNotification(`Nomor rekening ${type} berhasil disalin!`);
+      } catch (err) {
+        showNotification('Gagal menyalin nomor rekening');
+      }
+      
+      document.body.removeChild(textarea);
+    }
+
+    function showNotification(message) {
+      const config = window.elementSdk ? window.elementSdk.config : defaultConfig;
+      const notification = document.createElement('div');
+      notification.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        padding: 20px 32px;
+        border-radius: 12px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        z-index: 9999;
+        text-align: center;
+        max-width: 90%;
+      `;
+      notification.innerHTML = `
+        <p style="font-family: ${config.font_family || defaultConfig.font_family}, sans-serif; font-size: ${(config.font_size || defaultConfig.font_size)}px; color: #0a1929;">${message}</p>
+      `;
+      document.body.appendChild(notification);
+      setTimeout(() => notification.remove(), 2000);
+    }
+
+    // Initialize SDK
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities: (config) => ({
+          recolorables: [
+            {
+              get: () => config.background_color || defaultConfig.background_color,
+              set: (value) => {
+                config.background_color = value;
+                window.elementSdk.setConfig({ background_color: value });
+              }
+            },
+            {
+              get: () => config.surface_color || defaultConfig.surface_color,
+              set: (value) => {
+                config.surface_color = value;
+                window.elementSdk.setConfig({ surface_color: value });
+              }
+            },
+            {
+              get: () => config.text_color || defaultConfig.text_color,
+              set: (value) => {
+                config.text_color = value;
+                window.elementSdk.setConfig({ text_color: value });
+              }
+            },
+            {
+              get: () => config.primary_action_color || defaultConfig.primary_action_color,
+              set: (value) => {
+                config.primary_action_color = value;
+                window.elementSdk.setConfig({ primary_action_color: value });
+              }
+            },
+            {
+              get: () => config.secondary_action_color || defaultConfig.secondary_action_color,
+              set: (value) => {
+                config.secondary_action_color = value;
+                window.elementSdk.setConfig({ secondary_action_color: value });
+              }
+            }
+          ],
+          borderables: [],
+          fontEditable: {
+            get: () => config.font_family || defaultConfig.font_family,
+            set: (value) => {
+              config.font_family = value;
+              window.elementSdk.setConfig({ font_family: value });
+            }
+          },
+          fontSizeable: {
+            get: () => config.font_size || defaultConfig.font_size,
+            set: (value) => {
+              config.font_size = value;
+              window.elementSdk.setConfig({ font_size: value });
+            }
+          }
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ['bride_name', config.bride_name || defaultConfig.bride_name],
+          ['bride_nickname', config.bride_nickname || defaultConfig.bride_nickname],
+          ['bride_parents', config.bride_parents || defaultConfig.bride_parents],
+          ['bride_child', config.bride_child || defaultConfig.bride_child],
+          ['groom_name', config.groom_name || defaultConfig.groom_name],
+          ['groom_nickname', config.groom_nickname || defaultConfig.groom_nickname],
+          ['groom_parents', config.groom_parents || defaultConfig.groom_parents],
+          ['groom_child', config.groom_child || defaultConfig.groom_child],
+          ['akad_date', config.akad_date || defaultConfig.akad_date],
+          ['akad_time', config.akad_time || defaultConfig.akad_time],
+          ['resepsi_date', config.resepsi_date || defaultConfig.resepsi_date],
+          ['resepsi_time', config.resepsi_time || defaultConfig.resepsi_time],
+          ['venue_name', config.venue_name || defaultConfig.venue_name],
+          ['venue_address', config.venue_address || defaultConfig.venue_address],
+          ['maps_url', config.maps_url || defaultConfig.maps_url],
+          ['venue_name_resepsi', config.venue_name_resepsi || defaultConfig.venue_name_resepsi],
+          ['venue_address_resepsi', config.venue_address_resepsi || defaultConfig.venue_address_resepsi],
+          ['maps_url_resepsi', config.maps_url_resepsi || defaultConfig.maps_url_resepsi],
+          ['guest_name', config.guest_name || defaultConfig.guest_name],
+          ['closing_message', config.closing_message || defaultConfig.closing_message],
+          ['rekening_pria', config.rekening_pria || defaultConfig.rekening_pria],
+          ['rekening_wanita', config.rekening_wanita || defaultConfig.rekening_wanita],
+          ['instagram_bride', config.instagram_bride || defaultConfig.instagram_bride],
+          ['instagram_groom', config.instagram_groom || defaultConfig.instagram_groom],
+          ['instagram_url', config.instagram_url || defaultConfig.instagram_url]
+        ])
+      });
+    }
+
+    // Initial render
+    onConfigChange(defaultConfig);
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9b68305ef0b73de1',t:'MTc2NzE2NzQ1Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
